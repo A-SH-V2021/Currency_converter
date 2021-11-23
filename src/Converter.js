@@ -1,11 +1,15 @@
 import React from "react";
 import styled from "styled-components";
-const Converter = () => {
+const Converter = (props) => {
+  const {currency} = props
+  
   return (
     <Wrapper>
       <input type="number" />
       <select>
-        <option value="hi">hi</option>
+        {currency.map(item =>(
+           <option value={item}>{item}</option>
+        ))}
       </select>
     </Wrapper>
   );

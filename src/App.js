@@ -4,11 +4,12 @@ import Converter from "./Converter";
 const baseURL = "http://api.exchangeratesapi.io/v1/latest";
 const accessKey = process.env.REACT_APP_ACCESS_KEY;
 const App = () => {
+  const [rates, setRates] = useState([]);
   const fetchData = () => {
     const URL = `${baseURL}?access_key=${accessKey}`;
-    fetch(URL)
+     fetch(URL)
       .then((res) => res.json())
-      .then((data) => console.log(data));
+      .then((data) => setRates([data.base, ...Object.keys(data.rates)]));
   };
 
   useEffect(() => {
@@ -18,9 +19,9 @@ const App = () => {
     <Wrapper>
       <h1>convert</h1>
       <div className="conver">
-        <Converter />
+        <Converter currency={rates} />
         =
-        <Converter />
+        <Converter currency={rates}/>
       </div>
     </Wrapper>
   );
