@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 const Converter = (props) => {
-  const {currency} = props
-  
+  const { currency, selectedCurrency, changeHandler, amount } = props;
+
   return (
     <Wrapper>
-      <input type="number" />
-      <select>
-        {currency.map(item =>(
-           <option value={item}>{item}</option>
+      <input type="number"  value={amount}/>
+      <select value={selectedCurrency} onChange={changeHandler}>
+        {currency.map((item) => (
+          <option key={item} value={item}>
+            {item}
+          </option>
         ))}
       </select>
     </Wrapper>

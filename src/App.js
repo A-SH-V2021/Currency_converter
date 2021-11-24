@@ -5,11 +5,31 @@ const baseURL = "http://api.exchangeratesapi.io/v1/latest";
 const accessKey = process.env.REACT_APP_ACCESS_KEY;
 const App = () => {
   const [rates, setRates] = useState([]);
+  const [fromCurrency, setFromCurrency] = useState();
+  const [toCurrency, setToCurrency] = useState();
+  const [amount, setAmount] = useState(1);
+  const [exchangeRate, setExchangeRate] = useState();
+  const [amountFromCurrency, setAmountFromCurrency] = useState(true);
+  
+  let fromAmount, toAmount;
+  if (amountFromCurrency) {
+    fromAmount = amount;
+    toAmount = amount * exchangeRate;
+  } else {
+    toAmount = amount;
+    fromAmount = amount / exchangeRate;
+  }
   const fetchData = () => {
     const URL = `${baseURL}?access_key=${accessKey}`;
-     fetch(URL)
+    fetch(URL)
       .then((res) => res.json())
-      .then((data) => setRates([data.base, ...Object.keys(data.rates)]));
+      .then((data) => {
+        const firstCurrency = Object.keys(data.rates)[0];
+        setRates([...Object.keys(data.rates)]);
+        setFromCurrency(data.base);
+        setToCurrency(firstCurrency);
+        setExchangeRate(data.rates[firstCurrency]);
+      });
   };
 
   useEffect(() => {
@@ -19,9 +39,19 @@ const App = () => {
     <Wrapper>
       <h1>convert</h1>
       <div className="conver">
-        <Converter currency={rates} />
+        <Converter
+          currency={rates}
+          amount={fromAmount}
+          selectedCurrency={fromCurrency}
+          changeHandler={(e) => setFromCurrency(e.target.value)}
+        />
         =
-        <Converter currency={rates}/>
+        <Converter
+          currency={rates}
+          amount={toAmount}
+          selectedCurrency={toCurrency}
+          changeHandler={(e) => setToCurrency(e.target.value)}
+        />
       </div>
     </Wrapper>
   );
