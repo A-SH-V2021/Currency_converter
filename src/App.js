@@ -10,7 +10,7 @@ const App = () => {
   const [amount, setAmount] = useState(1);
   const [exchangeRate, setExchangeRate] = useState();
   const [amountFromCurrency, setAmountFromCurrency] = useState(true);
-  
+
   let fromAmount, toAmount;
   if (amountFromCurrency) {
     fromAmount = amount;
@@ -31,6 +31,14 @@ const App = () => {
         setExchangeRate(data.rates[firstCurrency]);
       });
   };
+  const changeFromHandler = (e) => {
+    setAmount(e.target.value);
+    setAmountFromCurrency(true);
+  };
+  const changeToHandler = (e) => {
+    setAmount(e.target.value);
+    setAmountFromCurrency(false);
+  };
 
   useEffect(() => {
     fetchData();
@@ -44,6 +52,7 @@ const App = () => {
           amount={fromAmount}
           selectedCurrency={fromCurrency}
           changeHandler={(e) => setFromCurrency(e.target.value)}
+          onChangeHandle={changeFromHandler}
         />
         =
         <Converter
@@ -51,6 +60,7 @@ const App = () => {
           amount={toAmount}
           selectedCurrency={toCurrency}
           changeHandler={(e) => setToCurrency(e.target.value)}
+          onChangeHandle={changeToHandler}
         />
       </div>
     </Wrapper>
